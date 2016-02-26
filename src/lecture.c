@@ -1,28 +1,78 @@
 #include <stdio.h>
 #include <stdlib.h>
-typedef int POSITION; 
 
-#define is_num(c)(('0' <= (c)) && ((c) <= '9'))
-#define VERTICAL 1
-#define HORIZONTAL 2
 #define N 40 
 
+typedef int CONTRAINT_TYPE 
+#define NON_EGAL 1
+#define SOMME 2
+ 
+typedef int POSITION; 
+#define VERTICAL 1
+#define HORIZONTAL 2
+
+#define is_num(c)(('0' <= (c)) && ((c) <= '9'))
+
+Contrainte *tabContrainX = (Contrainte*)calloc(N, sizeof List);
+Contrainte *tabContrainY = (Contrainte*)calloc(N, sizeof List);;
+CaseVide *tabCaseVide = (CaseVide*)calloc(N, sizeof CaseVide);;
+
+
+typedef struct Chainon List;
+struct Chainon {
+	Contrainte constrain;
+	struct Chainon *suiv;
+};
+ 
 typedef struct{
 	int x;
 	POSITION scope;
+	CONTRAINT_TYPE type;
 } Contrainte;
 
 typedef struct {
 	int x;
 	int y;
-	Contrainte tabCont[N]; 
+	int val;
 } CaseVide;
 
 int cptCaseVide = 0;
-int cptContrainte = 0;
 
-Contrainte tabContrain[N];
-CaseVide tabCaseVide[N];
+void freeTab(){
+	free (tabContrainX);
+	free (tabContrainY);
+	free (tabCaseVide);
+}
+
+void ajouttab(Contrainte *tab,Contrainte contraint){
+	List head = tab[contraint.x];
+	while(head.next != NULL){
+		head = head.next;
+	}
+	List newContraint;
+	newContraint.contraint = contraint;
+	newContraint.next = NULL;
+	head.next = newContraint;  
+}
+
+void ajoutContraint(int x,CONTRAINT_TYPE c,POSITION p){
+	Contrainte *tab; 
+	switch case (p){
+		case HORIZONTAL:
+			tab = tabContrainX;
+		break;
+		case VERTICAL:
+			tab = tabContrainY;
+		break;
+		default
+		fprintf(stderr, "Erreur contraint type inconue\n", ); 
+	}
+	Contrainte nouvelleContraint;
+	nouvelleContraint.x = x;
+	nouvelleContraint.scope = p;
+	nouvelleContraint.type = c;
+	ajouttab(tab,nouvelleContraint);
+}
 
 void ajoutCaseVide( int x , int y ){
 	CaseVide nouvelleCase;
@@ -30,6 +80,11 @@ void ajoutCaseVide( int x , int y ){
 	nouvelleCase.y = y;
 	tabCaseVide[cptCaseVide] = nouvelleCase;
 	++cptCaseVide;
+	Contrainte nouvelleContraint;
+	nouvelleContraint.x = x;
+	nouvelleContraint.scope = HORIZONTAL;
+	nouvelleContraint.type  = NON_EGAL;
+	tabContrainX =;
 }
 
 void ajoutCaseContrainte(number1,number2){
