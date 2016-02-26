@@ -14,7 +14,7 @@ all: $(EXEC)
 $(EXEC): $(OBJ)
 	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
-%.o: %.c
+%.o: %.clean
 	$(CC) -o $@ -c $< $(CCFLAGS)
 
 analyseur_lexical.o: analyseur_lexical.c
