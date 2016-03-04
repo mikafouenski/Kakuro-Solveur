@@ -1,7 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int matrix[50][50];
+#define is_num(c)(('0' <= (c)) && ((c) <= '9'))
+
+#define X_MAX   (5)
+#define Y_MAX   (6)
+
+int matrix[X_MAX][Y_MAX];
 
 typedef struct {
     int value;
@@ -25,12 +30,69 @@ void readFile (FILE *f) {
 
     char caracLu = fgetc(f);
 
-    while (caracLu != EOF){
+    while (caracLu != EOF) {
+        printf("%c",caracLu);
         switch (caracLu) {
-            
+            case '.':
+                
+                matrix[y][x] = -1;
+
+                ++x;
+            break;
+            case '\n' :
+                 printf("\n");
+                ++y;
+                x = 0;
+            break;
+            case ' ':
+            break;
+            default:
+                printf("%d",y);
+                matrix[y][x] = -2;
+                ++x;
+                break;
         }
         caracLu = fgetc(f);
+        while(is_num(caracLu)){
+            caracLu = fgetc(f);    
+        }
     }
+
+    rewind(f);
+    
+    for (int i = 0; i < X_MAX; ++i)
+    {
+        for (int j = 0; j < Y_MAX; ++j)
+        {
+            printf("%d ", matrix[i][j]);
+        }
+        printf("\n");
+    }
+
+    /*
+    //Recherche contrainte horizontal
+    while (caracLu != EOF){
+        if (caracLu == '\\') {
+            caracLu = fgetc(f);
+            if (is_num(caracLu)) {
+                c2 = atoi(caracLu);
+                caracLu = fgetc(f);
+                while(is_num(caracLu)) {
+                    c2 = c2 * 10 + atoi(caracLu);
+                    caracLu = fgetc(f);
+                }
+                if (c2 != 0) {
+                    C_Sum sum_horizon;
+                    while(caracLu != '\\'|| caracLu != '\n' ){
+                        caracLu = fgetc(f);
+                        C_Sum.tabPointer
+                    }
+                    c2 = 0;
+                }
+            }
+        }
+        caracLu = fgetc(f);
+    }*/
 }
 
 int main(int argc, char const *argv[])
@@ -40,17 +102,10 @@ int main(int argc, char const *argv[])
         perror("fopen");
         exit(1);
     }
-
-    /*matrix[0][0] = 50;
-    for (int i = 0; i < 50; ++i)
-    {
-        for (int j = 0; j < 50; ++j)
-        {
-            printf("%d", matrix[i][j]);
-        }
-        printf("\n");
-    }*/
+    for (int i = 0; i < X_MAX; ++i)
+        for (int j = 0; j < Y_MAX; ++j)
+            matrix[i][j] = -1;
     readFile(fic);
-
+    fclose(fic);
     return 0;
 }
