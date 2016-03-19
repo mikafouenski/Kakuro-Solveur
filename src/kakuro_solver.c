@@ -10,7 +10,7 @@ int number_of_empty_case = 0;
 int size_length = 0;
 int size_width = 0;
 
-void add_c_vertical(int indice,int number){
+void add_c_sum_vertical(int indice,int number){
     Constraints_Sum *sum = malloc(sizeof(Constraints_Sum));
     sum->value = number;
     sum->vars = malloc (sizeof(Variable) * number_of_empty_case);
@@ -24,12 +24,11 @@ void add_c_vertical(int indice,int number){
     }
 }
 
-void add_c_horizontal(int indice, int number){
+void add_c_sum_horizontal(int indice, int number){
     Constraints_Sum *sum = malloc( sizeof(Constraints_Sum));
     sum->value = number;
     sum->vars = malloc (sizeof(Variable) * number_of_empty_case);
     ++indice;
-    if(!variables[indice]) printf("%d\n",indice);
     int i = 0;
     while(variables[indice]){
         sum->vars[i] = variables[indice];
@@ -39,12 +38,45 @@ void add_c_horizontal(int indice, int number){
     }
 }
 
+void add_c_diff(int indice) {
+    int tmp = indice;
+    Constraints_Diff *diff = malloc(sizeof(Constraints_Diff));
+    diff->vars = malloc (sizeof(Variable) * number_of_empty_case);
+    ++tmp;
+    ++indice;
+    indice += size_width;
+    int i = 0;
+    while (variables[tmp] || variables[indice]) {
+        if (variables[tmp]) {
+            diff->vars[i] = variables[tmp];
+            variables[tmp]->diff = diff;
+            ++i;
+            ++tmp;
+        }
+        if (variables[indice]) {
+            diff->vars[i] = variables[indice];
+            variables[indice]->diff = diff;
+            indice += size_width;
+            ++i;
+        }
+    }
+}
+
 void display_contraints(Constraints_Sum *sum){
     int i;
     printf("Contrainte sum ");
     printf("%d ---", sum->value);
     for(i = 0; sum->vars[i]; ++i)
         printf(" %d ",sum->vars[i]->indice);
+    printf("\n");
+}
+
+void display_contraints_diff(Constraints_Diff *diff) {
+    int i;
+    printf("Contrainte diff ");
+    //printf("%d ---", sum->value);
+    for(i = 0; diff->vars[i]; ++i)
+        printf(" %d ",diff->vars[i]->indice);
     printf("\n");
 }
 
@@ -96,7 +128,8 @@ void search_contraints(FILE *file){
         switch(readed_char ){
             case '\\':
                 if(number1 != 0){
-                    add_c_vertical(indice,number1);
+                    add_c_sum_vertical(indice,number1);
+                    add_c_diff(indice);
                     number1 = 0;
                 }
                 readed_char = fgetc(file);
@@ -106,7 +139,8 @@ void search_contraints(FILE *file){
                     readed_char = fgetc(file);
                 }
                 if(number2){
-                    add_c_horizontal(indice,number2);
+                    add_c_sum_horizontal(indice,number2);
+                    add_c_diff(indice);
                     number2 = 0;
                 }
             case '.' :
@@ -143,10 +177,13 @@ void solve_kakuro (FILE *file) {
             printf("Case n°%d \n", var2->indice); 
             printf("Contrainte Horizontal \n");
             if (var2->sum_V)
-               display_contraints(var2->sum_V);
-           printf("Contrainte Vertical \n"); 
-           if (var2->sum_H)
-            display_contraints(var2->sum_H);
+                display_contraints(var2->sum_V);
+            printf("Contrainte Vertical \n"); 
+            if (var2->sum_H)
+                display_contraints(var2->sum_H);
+            printf("Contrainte Diff \n"); 
+            if (var2->diff)
+                display_contraints_diff(var2->diff);
         }
     }
     freedom(); // TODO

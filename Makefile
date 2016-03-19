@@ -18,5 +18,5 @@ $(EXEC): $(OBJ)
 	$(CC) -o $@ -c $< $(CCFLAGS)
 
 clean:
-	rm -f src/*.o
-	rm -f $(EXEC)
+	rm -fv src/*.o
+	rm -fv $(EXEC)
