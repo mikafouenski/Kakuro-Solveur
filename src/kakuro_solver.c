@@ -38,28 +38,32 @@ void add_c_sum_horizontal(int indice, int number){
     }
 }
 
-void add_c_diff(int indice) {
-    int tmp = indice;
+void add_c_diff(Variable * var) {
     Constraints_Diff *diff = malloc(sizeof(Constraints_Diff));
     diff->vars = malloc (sizeof(Variable) * number_of_empty_case);
-    ++tmp;
-    ++indice;
-    indice += size_width;
     int i = 0;
-    while (variables[tmp] || variables[indice]) {
-        if (variables[tmp]) {
-            diff->vars[i] = variables[tmp];
-            variables[tmp]->diff = diff;
+    int j = 0;
+    if(var->sum_H){
+        while(var->sum_H->vars[i]){
+            if(var->sum_H->vars[i] != var){
+                diff->vars[j] = var->sum_H->vars[i];
+                ++j;
+            }
             ++i;
-            ++tmp;
         }
-        if (variables[indice]) {
-            diff->vars[i] = variables[indice];
-            variables[indice]->diff = diff;
-            indice += size_width;
+    }      
+    i = 0;
+    if(var->sum_V){
+        while(var->sum_V->vars[i]){
+            if(var->sum_V->vars[i] != var){
+                diff->vars[j] = var->sum_V->vars[i];
+                ++j;
+            }
             ++i;
         }
     }
+    diff->vars[j] = var;
+    var->diff = diff;
 }
 
 void display_contraints(Constraints_Sum *sum){
@@ -74,7 +78,6 @@ void display_contraints(Constraints_Sum *sum){
 void display_contraints_diff(Constraints_Diff *diff) {
     int i;
     printf("Contrainte diff ");
-    //printf("%d ---", sum->value);
     for(i = 0; diff->vars[i]; ++i)
         printf(" %d ",diff->vars[i]->indice);
     printf("\n");
@@ -102,16 +105,16 @@ void search_empty_case(FILE *file){
         Variable *var = malloc (sizeof (Variable));
         switch (readed_char) {
             case '.' :
-                var->value = -1;
-                var->indice = empty_case_indice;
-                variables[x] = var;
-                ++number_of_empty_case;
+            var->value = -1;
+            var->indice = empty_case_indice;
+            variables[x] = var;
+            ++number_of_empty_case;
             case '\\':
-                ++empty_case_indice; 
-                ++x;
-                break;
+            ++empty_case_indice; 
+            ++x;
+            break;
             default:
-                break;
+            break;
         }
         readed_char = fgetc(file);
     }
@@ -127,31 +130,29 @@ void search_contraints(FILE *file){
     while(readed_char != EOF){
         switch(readed_char ){
             case '\\':
-                if(number1 != 0){
-                    add_c_sum_vertical(indice,number1);
-                    add_c_diff(indice);
-                    number1 = 0;
-                }
+            if(number1 != 0){
+                add_c_sum_vertical(indice,number1);
+                number1 = 0;
+            }
+            readed_char = fgetc(file);
+            while(is_num (readed_char)){
+                number2 *= 10;
+                number2 += atoi(&readed_char);
                 readed_char = fgetc(file);
-                while(is_num (readed_char)){
-                    number2 *= 10;
-                    number2 += atoi(&readed_char);
-                    readed_char = fgetc(file);
-                }
-                if(number2){
-                    add_c_sum_horizontal(indice,number2);
-                    add_c_diff(indice);
-                    number2 = 0;
-                }
+            }
+            if(number2){
+                add_c_sum_horizontal(indice,number2);
+                number2 = 0;
+            }
             case '.' :
-                ++indice;
-                break;
+            ++indice;
+            break;
             default :
-                if (is_num(readed_char)){
-                    number1 *= 10;
-                    number1 += atoi(&readed_char);
-                }
-                break;
+            if (is_num(readed_char)){
+                number1 *= 10;
+                number1 += atoi(&readed_char);
+            }
+            break;
         }
         readed_char = fgetc(file);
     }
@@ -166,14 +167,30 @@ void freedom () { // TODO
     }
 }
 
+void search_variable(Variable **tabvariables){
+    variablesInst = malloc(sizeof (Variable) * number_of_empty_case);
+    int j = 0;
+    int i;
+    for (i = 0; i < (size_width * size_length); ++i)
+    {
+        if(variables[i]){
+            variablesInst[j] = variables[i];
+            add_c_diff(variablesInst[j]);
+            ++j;
+        }   
+    }
+}
+
 void solve_kakuro (FILE *file) {
     initVal(file);
     search_empty_case(file);
     search_contraints(file);
+    search_variable(variables);
+    free(variables);
     int i;
-    for (i=0; i < size_width * size_length; ++i){
-        if(variables[i]) {
-            Variable *var2 = variables[i];
+    for (i=0; i < number_of_empty_case; ++i){
+            printf("\n");
+            Variable *var2 = variablesInst[i];
             printf("Case n°%d \n", var2->indice); 
             printf("Contrainte Horizontal \n");
             if (var2->sum_V)
@@ -184,7 +201,7 @@ void solve_kakuro (FILE *file) {
             printf("Contrainte Diff \n"); 
             if (var2->diff)
                 display_contraints_diff(var2->diff);
-        }
     }
+
     freedom(); // TODO
 }

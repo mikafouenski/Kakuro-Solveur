@@ -23,5 +23,6 @@ struct Constraints_Diff{
 };
 
 Variable **variables;
+Variable **variablesInst;
 
 void solve_kakuro (FILE *file);
