@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "inc/kakuro_solver.h"
+#include "inc/backtrack_solver.h"
 
 int main(int argc, char const *argv[]) {
     FILE *fic = fopen("kakuro_grid/enonce.txt","r");

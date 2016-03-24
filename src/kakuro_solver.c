@@ -1,10 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "kakuro_solver.h"
+#include "../inc/backtrack_solver.h"
 
 #define is_num(c)(('0' <= (c)) && ((c) <= '9'))
 
+int tabdomain[sizeDomain] = {1,2,3,4,5,6,7,8,9};
 int empty_case_indice = 0;
 int number_of_empty_case = 0;
 int size_length = 0;
@@ -62,7 +61,7 @@ void add_c_diff(Variable * var) {
             ++i;
         }
     }
-    diff->vars[j] = var;
+    //diff->vars[j] = var;
     var->diff = diff;
 }
 
@@ -158,12 +157,23 @@ void search_contraints(FILE *file){
     }
 }
 
-void freedom () { // TODO
-    for (int i = 0; i < size_width * size_length; ++i) {
-        if (variables[i]) {
-            Variable *var = variables[i];
-            free(var);
+void freedom () {
+    int i; 
+    for (i = 0; i < number_of_empty_case; ++i)
+    {
+        if(variablesInst[i]){
+            free(variablesInst[i]);
         }
+
+    }
+    free(variables);
+    free(variablesInst);
+}
+
+void initDomain(Variable * var){
+    for (int i = 0; i < sizeDomain; ++i)
+    {
+        var->tabdomainVar[i] = tabdomain[i];
     }
 }
 
@@ -171,37 +181,33 @@ void search_variable(Variable **tabvariables){
     variablesInst = malloc(sizeof (Variable) * number_of_empty_case);
     int j = 0;
     int i;
+    
     for (i = 0; i < (size_width * size_length); ++i)
     {
         if(variables[i]){
             variablesInst[j] = variables[i];
+            initDomain(variablesInst[j]);
+            variablesInst[j]-> indice_domaine = 0; 
             add_c_diff(variablesInst[j]);
             ++j;
         }   
     }
 }
 
+
 void solve_kakuro (FILE *file) {
     initVal(file);
     search_empty_case(file);
     search_contraints(file);
     search_variable(variables);
-    free(variables);
     int i;
+    
+    backtrack(variablesInst);
     for (i=0; i < number_of_empty_case; ++i){
-            printf("\n");
-            Variable *var2 = variablesInst[i];
-            printf("Case n°%d \n", var2->indice); 
-            printf("Contrainte Horizontal \n");
-            if (var2->sum_V)
-                display_contraints(var2->sum_V);
-            printf("Contrainte Vertical \n"); 
-            if (var2->sum_H)
-                display_contraints(var2->sum_H);
-            printf("Contrainte Diff \n"); 
-            if (var2->diff)
-                display_contraints_diff(var2->diff);
+        Variable *var2 = variablesInst[i];
+        printf("Case n°%d : %d", var2->indice,var2->value); 
+        printf("\n");
     }
 
-    freedom(); // TODO
+    freedom(); 
 }
