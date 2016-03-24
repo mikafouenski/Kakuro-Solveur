@@ -3,11 +3,14 @@
 #include "../inc/backtrack_solver.h"
 
 extern int number_of_empty_case;
-//#define number_of_empty_case 12
+
 
 void echec(){
-    printf("aucune Solution Trouver\n");
+    printf("TG Micka\n");
+    freedom();
+    exit(1);
 }
+
 void backtrack(Variable **v){
     int i = 0;
     Variable *current = v[i];
@@ -30,7 +33,6 @@ void backtrack(Variable **v){
         ++i;
         current = v[i];
     }
-
 }
 
 int testContraintSomme(Constraints_Sum * contraint){
