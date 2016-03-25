@@ -1,11 +1,9 @@
-#include <stdio.h>
-#include "../inc/kakuro_solver.h"
-#include "../inc/backtrack_solver.h"
+#include "backtrack_solver.h"
+#include "kakuro_solver.h"
 
 extern int number_of_empty_case;
 
-
-void echec(){
+void echec1(){
     printf("TG Micka\n");
     freedom();
     exit(1);
@@ -19,7 +17,7 @@ void backtrack(Variable **v){
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
                 if(i == 0){
-                  echec();
+                  echec1();
                 }
                 current->value = -1;
                 --i;
@@ -35,37 +33,4 @@ void backtrack(Variable **v){
     }
 }
 
-int testContraintSomme(Constraints_Sum * contraint){
-    if(contraint == NULL){
-        return 42;
-    }
-    int i = 0;
-    int sum = 0;
-    while(contraint->vars[i]){
-        if(contraint->vars[i]->value == -1){
-            return 42;
-        }
-        sum += contraint->vars[i]->value;
-        if(sum > contraint->value){
-            return 0;
-        }
-        ++i;
-    }
-    if(sum == contraint->value){
-        return 42;
-    }
-    
-    return 0;
-}
 
-int testContraintDiff(Constraints_Diff *  contraint, int val){
-    int i = 0;
-    while(contraint->vars[i]){
-        if (contraint->vars[i]->value == val){
-            return 0;
-        }
-        ++i;
-    }
-    
-    return 42;
-}  

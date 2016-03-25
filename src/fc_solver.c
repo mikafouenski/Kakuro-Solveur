@@ -1,16 +1,31 @@
-#include <stdio.h>
-#include "../inc/kakuro_solver.h"
-#include "../inc/backtrack_solver.h"
-#include "../inc/fc.h"
+#include "util.h"
+#include "kakuro_solver.h"
+
+extern int number_of_empty_case;
+
+void rebootDomain(Variable *v){
+    
+}
+
+void eraseDomain(Variable *v){
+
+}
+
+void echec(){
+    printf("TG Micka\n");
+    freedom();
+    exit(1);
+}
 
 void fc(Variable **v){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){
+        eraseDomain(current);
         do {
-            while(indice_domaine > sizeDomain || 
+            while(current->indice_domaine > sizeDomain || 
                 current->tabdomainVar[current->indice_domaine] == -1){
-                ++indice_domaine;
+                ++current->indice_domaine;
             }
             current->value = current->tabdomainVar[current->indice_domaine];
             
@@ -27,8 +42,9 @@ void fc(Variable **v){
         } while(!(testContraintDiff(current->diff,current->value) 
                 && testContraintSomme(current->sum_H) 
                 && testContraintSomme(current->sum_V)));
-        eraseDomain(current->diff,current->sum_H,current->sum_V);
         ++i;
         current = v[i];
     }
 }
+
+

@@ -1,9 +1,9 @@
 #include "kakuro_solver.h"
-#include "../inc/backtrack_solver.h"
+#include "backtrack_solver.h"
 
 #define is_num(c)(('0' <= (c)) && ((c) <= '9'))
 
-int tabdomain[sizeDomain] = {1,2,3,4,5,6,7,8,9};
+
 int empty_case_indice = 0;
 int number_of_empty_case = 0;
 int size_length = 0;
@@ -170,12 +170,7 @@ void freedom () {
     free(variablesInst);
 }
 
-void initDomain(Variable * var){
-    for (int i = 0; i < sizeDomain; ++i)
-    {
-        var->tabdomainVar[i] = tabdomain[i];
-    }
-}
+
 
 void search_variable(Variable **tabvariables){
     variablesInst = malloc(sizeof (Variable) * number_of_empty_case);
