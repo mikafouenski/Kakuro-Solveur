@@ -63,14 +63,13 @@ void fc(Variable **v){
     while(i < number_of_empty_case){ 
 
         eraseDomain(current);
-       // displayDomain(current);
+        displayDomain(current);
         do {
-            while(current->indice_domaine > sizeDomain && 
+            while(current->indice_domaine < sizeDomain && 
                 current->tabdomainVar[current->indice_domaine] == -1){
                 ++current->indice_domaine;
             }
-            if(current->indice_domaine < sizeDomain)
-                current->value = current->tabdomainVar[current->indice_domaine];
+           
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
                 if(i == 0) echec();
@@ -78,11 +77,19 @@ void fc(Variable **v){
                 current->value = -1;
                 --i;
                 current = v[i];
+                while(current->tabdomainVar[current->indice_domaine] == -1){
+                    if(current->indice_domaine > sizeDomain)
+                        break;
+                    ++current->indice_domaine;
+                }
             }
+
+            current->value = current->tabdomainVar[current->indice_domaine];
             ++current->indice_domaine;
         } while(!(testContraintDiff(current->diff,current->value) && 
             testContraintSomme(current->sum_H) &&
             testContraintSomme(current->sum_V)));
+       // printf("current Var %d %d\n",current->indice,current ->value );
         ++i;
         current = v[i];
     }
