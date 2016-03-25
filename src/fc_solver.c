@@ -13,8 +13,10 @@ void eraseContraintSum(Variable *v, Constraints_Sum *cs ) {
     while(cs->vars[i]) {
         if(cs->vars[i]->value != -1) {
             sum += cs->vars[i]->value;
-            ++is_declared;
+            
         }
+        else
+            ++is_declared;
         ++i;
     }
     if(is_declared == 1) {
@@ -22,8 +24,6 @@ void eraseContraintSum(Variable *v, Constraints_Sum *cs ) {
         for (i = 0; i < sizeDomain; ++i)
             if(i != max-1)
                 v->tabdomainVar[i] = -1;
-// <<<<<<< HEAD
-        //}
     }
     else {
      max =  cs->value - sum ;
@@ -32,14 +32,6 @@ void eraseContraintSum(Variable *v, Constraints_Sum *cs ) {
             if(i > max-1)
                 v->tabdomainVar[i] = -1;
         }
-// =======
-//     } else {
-//         max =  cs->value - sum;
-//         if(max <= 9)
-//             for (i = 0;i < sizeDomain; ++i)
-//                 if(i >= max-1)
-//                     v->tabdomainVar[i] = -1;
-// // >>>>>>> 7bb91b0e0e2f5c2bd0c5499934f6f6a8d1b478f2
     }
 }
 
@@ -57,7 +49,6 @@ void eraseDomain(Variable *v) {
     }
 }
 
-// <<<<<<< HEAD
 void displayDomain(Variable *v){
     printf("variable n°%d : ",v->indice);
     for(int i = 0 ; i < sizeDomain; ++i){
@@ -70,17 +61,10 @@ void fc(Variable **v){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){ 
-// =======
-// void fc(Variable **v) {
-//     int i = 0;
-//     Variable *current = v[i];
-//     while(i < number_of_empty_case) {
-// >>>>>>> 7bb91b0e0e2f5c2bd0c5499934f6f6a8d1b478f2
-        eraseDomain(current);
-        displayDomain(current);
-        do {
-// <<<<<<< HEAD
 
+        eraseDomain(current);
+       // displayDomain(current);
+        do {
             while(current->indice_domaine > sizeDomain && 
                 current->tabdomainVar[current->indice_domaine] == -1){
                 ++current->indice_domaine;
@@ -88,13 +72,6 @@ void fc(Variable **v){
             if(current->indice_domaine < sizeDomain)
                 current->value = current->tabdomainVar[current->indice_domaine];
             while(current->indice_domaine > sizeDomain){
-// =======
-            // while(current->indice_domaine > sizeDomain || 
-            //     current->tabdomainVar[current->indice_domaine] == -1)
-            //     ++current->indice_domaine;
-            // current->value = current->tabdomainVar[current->indice_domaine];
-            // while(current->indice_domaine > sizeDomain) {
-// >>>>>>> 7bb91b0e0e2f5c2bd0c5499934f6f6a8d1b478f2
                 current->indice_domaine = 0;
                 if(i == 0) echec();
                 rebootDomain(current);
