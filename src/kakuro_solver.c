@@ -3,6 +3,7 @@
 
 #include "kakuro_solver.h"
 #include "backtrack_solver.h"
+#include "fc_solver.h"
 
 #define is_num(c)(('0' <= (c)) && ((c) <= '9'))
 
@@ -195,7 +196,7 @@ void solve_kakuro (FILE *file) {
     search_contraints(file);
     search_variable(variables);
     int i;
-    fc(variablesInst);
+    backtrack(variablesInst);
     for (i=0; i < number_of_empty_case; ++i) {
         Variable *var2 = variablesInst[i];
         printf("Case n°%d : %d", var2->indice,var2->value); 

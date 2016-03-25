@@ -24,6 +24,7 @@ void eraseContraintSum(Variable *v, Constraints_Sum *cs ){
             sum += cs->vars[i]->value;
             ++nb_non_inst;
         }
+        ++i;
     }
     if(nb_non_inst == 1){
         max = cs->value - sum;
@@ -37,7 +38,7 @@ void eraseContraintSum(Variable *v, Constraints_Sum *cs ){
      max =  cs->value - sum ;
      if(max <= 9){
         for (i = 0;i < sizeDomain; ++i)
-            if(i >= max-1)
+            if(i > max-1)
                 v->tabdomainVar[i] = -1;
         }
     }
@@ -64,19 +65,28 @@ void eraseDomain(Variable *v){
 
 }
 
+void displayDomain(Variable *v){
+    printf("variable n°%d : ",v->indice);
+    for(int i = 0 ; i < sizeDomain; ++i){
+        printf(" %d ", v->tabdomainVar[i]);
+    }
+    printf("\n");
+}
+
 void fc(Variable **v){
     int i = 0;
     Variable *current = v[i];
-    while(i < number_of_empty_case){
+    while(i < number_of_empty_case){ 
         eraseDomain(current);
+        displayDomain(current);
         do {
 
-            while(current->indice_domaine > sizeDomain || 
+            while(current->indice_domaine > sizeDomain && 
                 current->tabdomainVar[current->indice_domaine] == -1){
                 ++current->indice_domaine;
             }
-            current->value = current->tabdomainVar[current->indice_domaine];
-
+            if(current->indice_domaine < sizeDomain)
+                current->value = current->tabdomainVar[current->indice_domaine];
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
                 if(i == 0)
