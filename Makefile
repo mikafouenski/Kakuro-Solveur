@@ -12,7 +12,7 @@ EXEC=kakuro
 all: $(EXEC)
 
 $(EXEC): $(OBJ)
-	$(CC) -o $(EXEC) $(EXEC).c $^ $(LDFLAGS)
+	$(CC) -o $(EXEC) $^ $(LDFLAGS)
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CCFLAGS)
