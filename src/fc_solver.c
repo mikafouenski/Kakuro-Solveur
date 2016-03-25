@@ -26,21 +26,21 @@ void eraseContraintSum(Variable *v, Constraints_Sum *cs ){
         }
     }
     if(nb_non_inst == 1){
-        max = sum - cs->value;
+        max = cs->value - sum;
         for (i = 0; i < sizeDomain; ++i)
         {
-            if(i != max)
+            if(i != max-1)
                 v->tabdomain[i] = -1;
         }
     }
     else {
-     max = sum - cs->value;
-     if(max <= 9){
-        for (i = 0;i <= max; ++i)
-            v->tabdomain[i] = -1;
-        
+       max =  cs->value - sum ;
+       if(max <= 9){
+        for (i = 0;i < sizeDomain; ++i)
+            if(i => max-1)
+                v->tabdomain[i] = -1;
+        }
     }
-}
 } 
 
 void eraseDomain(Variable *v){
