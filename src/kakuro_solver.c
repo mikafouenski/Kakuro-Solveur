@@ -195,7 +195,7 @@ void solve_kakuro (FILE *file) {
     search_contraints(file);
     search_variable(variables);
     int i;
-    backtrack(variablesInst);
+    fc(variablesInst);
     for (i=0; i < number_of_empty_case; ++i) {
         Variable *var2 = variablesInst[i];
         printf("Case n°%d : %d", var2->indice,var2->value); 
