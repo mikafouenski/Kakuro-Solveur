@@ -1,5 +1,9 @@
-#include <stdlib.h>
 #include "util.h"
+
+int tabdomain[sizeDomain] = {1,2,3,4,5,6,7,8,9};
+int number_of_empty_case = 0;
+int size_length = 0;
+int size_width = 0;
 
 int testContraintSomme(Constraints_Sum * contraint){
     if(contraint == NULL) return 42;
@@ -15,7 +19,6 @@ int testContraintSomme(Constraints_Sum * contraint){
     return 0;
 }
 
-
 int testContraintDiff(Constraints_Diff *  contraint, int val){
     int i = 0;
     while(contraint->vars[i]){
@@ -23,4 +26,19 @@ int testContraintDiff(Constraints_Diff *  contraint, int val){
         ++i;
     }
     return 42;
+}
+
+void echec(){
+    printf("Erreur\n");
+    freedom();
+    exit(1);
+}
+
+void freedom () {
+    int i;
+    for (i = 0; i < number_of_empty_case; ++i)
+        if(variablesInst[i])
+            free(variablesInst[i]);
+    free(variables);
+    free(variablesInst);
 }

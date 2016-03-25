@@ -1,24 +1,16 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "kakuro_solver.h"
-#include "backtrack_solver.h"
 
 #define is_num(c)(('0' <= (c)) && ((c) <= '9'))
 
-int tabdomain[sizeDomain] = {1,2,3,4,5,6,7,8,9};
 int empty_case_indice = 0;
-int number_of_empty_case = 0;
-int size_length = 0;
-int size_width = 0;
 
-void add_c_sum_vertical(int indice,int number){
+void add_c_sum_vertical(int indice,int number) {
     Constraints_Sum *sum = malloc(sizeof(Constraints_Sum));
     sum->value = number;
     sum->vars = malloc (sizeof(Variable) * number_of_empty_case);
     indice += size_width;
     int i = 0;
-    while(variables[indice]){
+    while(variables[indice]) {
         sum->vars[i] = variables[indice];
         variables[indice]->sum_V = sum;
         ++i;
@@ -26,13 +18,13 @@ void add_c_sum_vertical(int indice,int number){
     }
 }
 
-void add_c_sum_horizontal(int indice, int number){
+void add_c_sum_horizontal(int indice, int number) {
     Constraints_Sum *sum = malloc( sizeof(Constraints_Sum));
     sum->value = number;
     sum->vars = malloc (sizeof(Variable) * number_of_empty_case);
     ++indice;
     int i = 0;
-    while(variables[indice]){
+    while(variables[indice]) {
         sum->vars[i] = variables[indice];
         variables[indice]->sum_H = sum;
         ++i;
@@ -46,8 +38,8 @@ void add_c_diff(Variable * var) {
     int i = 0;
     int j = 0;
     if(var->sum_H){
-        while(var->sum_H->vars[i]){
-            if(var->sum_H->vars[i] != var){
+        while(var->sum_H->vars[i]) {
+            if(var->sum_H->vars[i] != var) {
                 diff->vars[j] = var->sum_H->vars[i];
                 ++j;
             }
@@ -56,7 +48,7 @@ void add_c_diff(Variable * var) {
     }
     i = 0;
     if(var->sum_V){
-        while(var->sum_V->vars[i]){
+        while(var->sum_V->vars[i]) {
             if(var->sum_V->vars[i] != var){
                 diff->vars[j] = var->sum_V->vars[i];
                 ++j;
@@ -159,15 +151,6 @@ void search_contraints(FILE *file){
     }
 }
 
-void freedom () {
-    int i; 
-    for (i = 0; i < number_of_empty_case; ++i)
-        if(variablesInst[i])
-            free(variablesInst[i]);
-    free(variables);
-    free(variablesInst);
-}
-
 void initDomain(Variable * var){
     for (int i = 0; i < sizeDomain; ++i)
         var->tabdomainVar[i] = tabdomain[i];
@@ -188,14 +171,16 @@ void search_variable(Variable **tabvariables){
     }
 }
 
-
-void solve_kakuro (FILE *file) {
+void solve_kakuro (FILE *file, int useFowardChecking) {
     initVal(file);
     search_empty_case(file);
     search_contraints(file);
     search_variable(variables);
     int i;
-    fc(variablesInst);
+    if (useFowardChecking)
+        fc(variablesInst);
+    else
+        backtrack(variablesInst);
     for (i=0; i < number_of_empty_case; ++i) {
         Variable *var2 = variablesInst[i];
         printf("Case n°%d : %d", var2->indice,var2->value); 

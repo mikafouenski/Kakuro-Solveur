@@ -1,6 +1,11 @@
-#include <stdio.h>
-#include "util.h"
+#ifndef __KAKURO_SOLVER_H__
+#define __KAKURO_SOLVER_H__
 
-void solve_kakuro (FILE *file);
+#include "fc_solver.h"
+#include "backtrack_solver.h"
 
-void freedom ();
+void solve_kakuro (FILE *file, int useFowardChecking);
+
+#endif
+
+
