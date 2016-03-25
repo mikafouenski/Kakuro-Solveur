@@ -1,3 +1,5 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include "fc_solver.h"
 #include "kakuro_solver.h"
 

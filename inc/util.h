@@ -1,11 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #ifndef _UTILH_
 #define _UTILH_
 
 #define sizeDomain 9
-
 
 typedef struct Constraints_Sum Constraints_Sum;
 typedef struct Constraints_Diff Constraints_Diff;

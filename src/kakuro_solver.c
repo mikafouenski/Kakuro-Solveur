@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "kakuro_solver.h"
 #include "backtrack_solver.h"
 
@@ -50,7 +53,7 @@ void add_c_diff(Variable * var) {
             }
             ++i;
         }
-    }      
+    }
     i = 0;
     if(var->sum_V){
         while(var->sum_V->vars[i]){
@@ -64,22 +67,22 @@ void add_c_diff(Variable * var) {
     var->diff = diff;
 }
 
-void display_contraints(Constraints_Sum *sum){
-    int i;
-    printf("Contrainte sum ");
-    printf("%d ---", sum->value);
-    for(i = 0; sum->vars[i]; ++i)
-        printf(" %d ",sum->vars[i]->indice);
-    printf("\n");
-}
+// void display_contraints(Constraints_Sum *sum){
+//     int i;
+//     printf("Contrainte sum ");
+//     printf("%d ---", sum->value);
+//     for(i = 0; sum->vars[i]; ++i)
+//         printf(" %d ",sum->vars[i]->indice);
+//     printf("\n");
+// }
 
-void display_contraints_diff(Constraints_Diff *diff) {
-    int i;
-    printf("Contrainte diff ");
-    for(i = 0; diff->vars[i]; ++i)
-        printf(" %d ",diff->vars[i]->indice);
-    printf("\n");
-}
+// void display_contraints_diff(Constraints_Diff *diff) {
+//     int i;
+//     printf("Contrainte diff ");
+//     for(i = 0; diff->vars[i]; ++i)
+//         printf(" %d ",diff->vars[i]->indice);
+//     printf("\n");
+// }
 
 void initVal(FILE *file){
     char readed_char = fgetc(file);
@@ -103,16 +106,16 @@ void search_empty_case(FILE *file){
         Variable *var = malloc (sizeof (Variable));
         switch (readed_char) {
             case '.' :
-            var->value = -1;
-            var->indice = empty_case_indice;
-            variables[x] = var;
-            ++number_of_empty_case;
+                var->value = -1;
+                var->indice = empty_case_indice;
+                variables[x] = var;
+                ++number_of_empty_case;
             case '\\':
-            ++empty_case_indice; 
-            ++x;
-            break;
+                ++empty_case_indice; 
+                ++x;
+                break;
             default:
-            break;
+                break;
         }
         readed_char = fgetc(file);
     }
@@ -125,32 +128,32 @@ void search_contraints(FILE *file){
     int number2 = 0;
     int indice = 0;
     readed_char = fgetc(file);
-    while(readed_char != EOF){
-        switch(readed_char ){
+    while(readed_char != EOF) {
+        switch(readed_char ) {
             case '\\':
-            if(number1 != 0){
-                add_c_sum_vertical(indice,number1);
-                number1 = 0;
-            }
-            readed_char = fgetc(file);
-            while(is_num (readed_char)){
-                number2 *= 10;
-                number2 += atoi(&readed_char);
+                if(number1 != 0) {
+                    add_c_sum_vertical(indice,number1);
+                    number1 = 0;
+                }
                 readed_char = fgetc(file);
-            }
-            if(number2){
-                add_c_sum_horizontal(indice,number2);
-                number2 = 0;
-            }
-            case '.' :
-            ++indice;
-            break;
+                while(is_num(readed_char)) {
+                    number2 *= 10;
+                    number2 += atoi(&readed_char);
+                    readed_char = fgetc(file);
+                }
+                if(number2) {
+                    add_c_sum_horizontal(indice,number2);
+                    number2 = 0;
+                }
+            case '.':
+                ++indice;
+                break;
             default :
-            if (is_num(readed_char)){
-                number1 *= 10;
-                number1 += atoi(&readed_char);
-            }
-            break;
+                if (is_num(readed_char)) {
+                    number1 *= 10;
+                    number1 += atoi(&readed_char);
+                }
+                break;
         }
         readed_char = fgetc(file);
     }
@@ -159,37 +162,29 @@ void search_contraints(FILE *file){
 void freedom () {
     int i; 
     for (i = 0; i < number_of_empty_case; ++i)
-    {
-        if(variablesInst[i]){
+        if(variablesInst[i])
             free(variablesInst[i]);
-        }
-
-    }
     free(variables);
     free(variablesInst);
 }
 
 void initDomain(Variable * var){
     for (int i = 0; i < sizeDomain; ++i)
-    {
         var->tabdomainVar[i] = tabdomain[i];
-    }
 }
 
 void search_variable(Variable **tabvariables){
     variablesInst = malloc(sizeof (Variable) * number_of_empty_case);
     int j = 0;
     int i;
-    
-    for (i = 0; i < (size_width * size_length); ++i)
-    {
-        if(variables[i]){
+    for (i = 0; i < (size_width * size_length); ++i) {
+        if(variables[i]) {
             variablesInst[j] = variables[i];
             initDomain(variablesInst[j]);
             variablesInst[j]-> indice_domaine = 0; 
             add_c_diff(variablesInst[j]);
             ++j;
-        }   
+        }
     }
 }
 
@@ -200,13 +195,11 @@ void solve_kakuro (FILE *file) {
     search_contraints(file);
     search_variable(variables);
     int i;
-    
     backtrack(variablesInst);
-    for (i=0; i < number_of_empty_case; ++i){
+    for (i=0; i < number_of_empty_case; ++i) {
         Variable *var2 = variablesInst[i];
         printf("Case n°%d : %d", var2->indice,var2->value); 
         printf("\n");
     }
-
-    freedom(); 
+    freedom();
 }

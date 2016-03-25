@@ -1,10 +1,13 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "backtrack_solver.h"
 #include "kakuro_solver.h"
 
 extern int number_of_empty_case;
 
-void echec1(){
-    printf("TG Micka\n");
+void echec(){
+    printf("Erreur\n");
     freedom();
     exit(1);
 }
@@ -17,7 +20,7 @@ void backtrack(Variable **v){
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
                 if(i == 0){
-                  echec1();
+                  echec();
                 }
                 current->value = -1;
                 --i;
