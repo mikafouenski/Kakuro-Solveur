@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include "kakuro_solver.h"
-
 
 int main(int argc, char const *argv[]) {
     FILE *fic = fopen("kakuro_grid/grille_8x8a.txt","r");
@@ -9,7 +6,7 @@ int main(int argc, char const *argv[]) {
         perror("fopen");
         exit(1);
     }
-    solve_kakuro(fic);
+    solve_kakuro(fic, 1);
     fclose(fic);
     return 0;
 }
