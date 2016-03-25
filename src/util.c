@@ -23,12 +23,6 @@ int testContraintSomme(Constraints_Sum * contraint){
     return 0;
 }
 
-void initDomain(Variable * var){
-    for (int i = 0; i < sizeDomain; ++i)
-    {
-        var->tabdomainVar[i] = tabdomain[i];
-    }
-}
 
 int testContraintDiff(Constraints_Diff *  contraint, int val){
     int i = 0;

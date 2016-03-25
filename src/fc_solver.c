@@ -1,10 +1,14 @@
-#include "util.h"
+#include "fc_solver.h"
 #include "kakuro_solver.h"
 
 extern int number_of_empty_case;
+extern int tabdomain[sizeDomain];
 
 void rebootDomain(Variable *v){
-    
+    for (int i = 0; i < sizeDomain; ++i)
+    {
+        v->tabdomainVar[i] = tabdomain[i];
+    }
 }
 
 void eraseDomain(Variable *v){

@@ -5,7 +5,7 @@
 #define _UTILH_
 
 #define sizeDomain 9
-int tabdomain[sizeDomain] = {1,2,3,4,5,6,7,8,9};
+
 
 typedef struct Constraints_Sum Constraints_Sum;
 typedef struct Constraints_Diff Constraints_Diff;
@@ -38,7 +38,5 @@ Variable **variablesInst;
 int testContraintDiff();
 
 int testContraintSomme();
-
-void initDomain(Variable * var);
 
 #endif
