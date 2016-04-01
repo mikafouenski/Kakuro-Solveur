@@ -9,7 +9,7 @@ int empty_case_indice = 0;
 void add_c_sum_vertical(int indice,int number) {
     Constraints_Sum *sum = malloc(sizeof(Constraints_Sum));
     sum->value = number;
-    sum->vars = malloc (sizeof(Variable) * number_of_empty_case);
+    sum->vars = calloc (number_of_empty_case, sizeof(Variable));
     indice += size_width;
     int i = 0;
     while(variables[indice]) {
@@ -23,7 +23,7 @@ void add_c_sum_vertical(int indice,int number) {
 void add_c_sum_horizontal(int indice, int number) {
     Constraints_Sum *sum = malloc( sizeof(Constraints_Sum));
     sum->value = number;
-    sum->vars = malloc (sizeof(Variable) * number_of_empty_case);
+    sum->vars = calloc (number_of_empty_case, sizeof(Variable));
     ++indice;
     int i = 0;
     while(variables[indice]) {
@@ -36,7 +36,7 @@ void add_c_sum_horizontal(int indice, int number) {
 
 void add_c_diff(Variable * var) {
     Constraints_Diff *diff = malloc(sizeof(Constraints_Diff));
-    diff->vars = malloc (sizeof(Variable) * number_of_empty_case);
+    diff->vars = calloc (number_of_empty_case, sizeof(Variable));
     int i = 0;
     int j = 0;
     if(var->sum_H){
@@ -88,7 +88,7 @@ void initVal(FILE *file){
         readed_char = fgetc(file);
     }
     size_width = size_width/size_length;
-    variables = malloc(size_width * size_length * sizeof (Variable));
+    variables = calloc (size_width * size_length, sizeof(Variable));
 }
 
 void search_empty_case(FILE *file){
@@ -123,7 +123,7 @@ void search_contraints(FILE *file){
     int indice = 0;
     readed_char = fgetc(file);
     while(readed_char != EOF) {
-        switch(readed_char ) {
+        switch(readed_char) {
             case '\\':
                 if(number1 != 0) {
                     add_c_sum_vertical(indice,number1);
@@ -159,7 +159,7 @@ void initDomain(Variable * var){
 }
 
 void search_variable(Variable **tabvariables){
-    variablesInst = malloc(sizeof (Variable) * number_of_empty_case);
+    variablesInst = calloc(number_of_empty_case, sizeof(Variable));
     int j = 0;
     int i;
     for (i = 0; i < (size_width * size_length); ++i) {
