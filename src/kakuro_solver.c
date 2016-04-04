@@ -179,14 +179,9 @@ void solve_kakuro (FILE *file, int useFowardChecking) {
     search_contraints(file);
     search_variable(variables);
     int i;
-// <<<<<<< HEAD
-    backtrack(variablesInst);
-// =======
-//     if (useFowardChecking)
-//         fc(variablesInst);
-//     else
-//         backtrack(variablesInst);
-// >>>>>>> 7bb91b0e0e2f5c2bd0c5499934f6f6a8d1b478f2
+
+    fc(variablesInst);
+
     for (i=0; i < number_of_empty_case; ++i) {
         Variable *var2 = variablesInst[i];
         printf("Case n°%d : %d", var2->indice,var2->value); 
