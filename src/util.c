@@ -29,7 +29,12 @@ int testContraintDiff(Constraints_Diff *  contraint, int val){
 }
 
 void echec(){
-    printf("Erreur\n");
+    for (int i=0; i < number_of_empty_case; ++i) {
+        Variable *var2 = variablesInst[i];
+        printf("Case n°%d : %d", var2->indice,var2->value); 
+        printf("\n");
+    }
+    printf("ECHEC !\n");
     freedom();
     exit(1);
 }

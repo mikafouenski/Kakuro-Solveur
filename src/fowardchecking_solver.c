@@ -1,4 +1,4 @@
-#include "fc_solver.h"
+#include "fowardchecking_solver.h"
 
 void rebootDomain(Variable *v) {
     for (int i = 0; i < sizeDomain; ++i)
@@ -57,13 +57,13 @@ void displayDomain(Variable *v){
     printf("\n");
 }
 
-void fc(Variable **v){
+void fowardchecking(Variable **v){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){ 
 
         eraseDomain(current);
-        displayDomain(current);
+        //displayDomain(current);
         do {
             while(current->indice_domaine < sizeDomain && 
                 current->tabdomainVar[current->indice_domaine] == -1){

@@ -1,6 +1,6 @@
 #include "kakuro_solver.h"
 #include "backtrack_solver.h"
-#include "fc_solver.h"
+#include "fowardchecking_solver.h"
 
 #define is_num(c)(('0' <= (c)) && ((c) <= '9'))
 
@@ -9,7 +9,7 @@ int empty_case_indice = 0;
 void add_c_sum_vertical(int indice,int number) {
     Constraints_Sum *sum = malloc(sizeof(Constraints_Sum));
     sum->value = number;
-    sum->vars = calloc (number_of_empty_case, sizeof(Variable));
+    sum->vars = calloc (number_of_empty_case +1, sizeof(Variable));
     indice += size_width;
     int i = 0;
     while(variables[indice]) {
@@ -23,7 +23,7 @@ void add_c_sum_vertical(int indice,int number) {
 void add_c_sum_horizontal(int indice, int number) {
     Constraints_Sum *sum = malloc( sizeof(Constraints_Sum));
     sum->value = number;
-    sum->vars = calloc (number_of_empty_case, sizeof(Variable));
+    sum->vars = calloc (number_of_empty_case +1, sizeof(Variable));
     ++indice;
     int i = 0;
     while(variables[indice]) {
@@ -36,7 +36,7 @@ void add_c_sum_horizontal(int indice, int number) {
 
 void add_c_diff(Variable * var) {
     Constraints_Diff *diff = malloc(sizeof(Constraints_Diff));
-    diff->vars = calloc (number_of_empty_case, sizeof(Variable));
+    diff->vars = calloc (number_of_empty_case +1, sizeof(Variable));
     int i = 0;
     int j = 0;
     if(var->sum_H){
@@ -88,7 +88,7 @@ void initVal(FILE *file){
         readed_char = fgetc(file);
     }
     size_width = size_width/size_length;
-    variables = calloc (size_width * size_length, sizeof(Variable));
+    variables = calloc (size_width * size_length +1, sizeof(Variable));
 }
 
 void search_empty_case(FILE *file){
@@ -117,7 +117,7 @@ void search_empty_case(FILE *file){
 
 void search_contraints(FILE *file){
     rewind(file);
-    char readed_char;
+    int readed_char;
     int number1 = 0;
     int number2 = 0;
     int indice = 0;
@@ -132,10 +132,10 @@ void search_contraints(FILE *file){
                 readed_char = fgetc(file);
                 while(is_num(readed_char)) {
                     number2 *= 10;
-                    number2 += atoi(&readed_char);
+                    number2 += readed_char - '0';
                     readed_char = fgetc(file);
                 }
-                if(number2) {
+                if(number2 != 0) {
                     add_c_sum_horizontal(indice,number2);
                     number2 = 0;
                 }
@@ -145,7 +145,7 @@ void search_contraints(FILE *file){
             default :
                 if (is_num(readed_char)) {
                     number1 *= 10;
-                    number1 += atoi(&readed_char);
+                    number1 += readed_char - '0';
                 }
                 break;
         }
@@ -159,7 +159,7 @@ void initDomain(Variable * var){
 }
 
 void search_variable(Variable **tabvariables){
-    variablesInst = calloc(number_of_empty_case, sizeof(Variable));
+    variablesInst = calloc(number_of_empty_case +1, sizeof(Variable));
     int j = 0;
     int i;
     for (i = 0; i < (size_width * size_length); ++i) {
@@ -180,7 +180,7 @@ void solve_kakuro (FILE *file, int useFowardChecking) {
     search_variable(variables);
     int i;
 
-    fc(variablesInst);
+    fowardchecking(variablesInst);
 
     for (i=0; i < number_of_empty_case; ++i) {
         Variable *var2 = variablesInst[i];
