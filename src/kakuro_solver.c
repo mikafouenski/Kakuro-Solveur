@@ -9,7 +9,7 @@ int empty_case_indice = 0;
 void add_c_sum_vertical(int indice,int number) {
     Constraints_Sum *sum = malloc(sizeof(Constraints_Sum));
     sum->value = number;
-    sum->vars = calloc (number_of_empty_case +1, sizeof(Variable));
+    sum->vars = calloc (number_of_empty_case, sizeof(Variable));
     indice += size_width;
     int i = 0;
     while(variables[indice]) {
@@ -23,7 +23,7 @@ void add_c_sum_vertical(int indice,int number) {
 void add_c_sum_horizontal(int indice, int number) {
     Constraints_Sum *sum = malloc( sizeof(Constraints_Sum));
     sum->value = number;
-    sum->vars = calloc (number_of_empty_case +1, sizeof(Variable));
+    sum->vars = calloc (number_of_empty_case, sizeof(Variable));
     ++indice;
     int i = 0;
     while(variables[indice]) {
@@ -36,7 +36,7 @@ void add_c_sum_horizontal(int indice, int number) {
 
 void add_c_diff(Variable * var) {
     Constraints_Diff *diff = malloc(sizeof(Constraints_Diff));
-    diff->vars = calloc (number_of_empty_case +1, sizeof(Variable));
+    diff->vars = calloc (number_of_empty_case, sizeof(Variable));
     int i = 0;
     int j = 0;
     if(var->sum_H){
@@ -71,18 +71,19 @@ void initVal(FILE *file){
         readed_char = fgetc(file);
     }
     size_width = size_width/size_length;
-    variables = calloc (size_width * size_length +1, sizeof(Variable));
+    variables = calloc (size_width * size_length, sizeof(Variable));
 }
 
 void search_empty_case(FILE *file){
     rewind(file);
     char readed_char;
     int x = 0;
+    Variable *var;
     readed_char = fgetc(file);
     while (readed_char != EOF) {
-        Variable *var = malloc (sizeof (Variable));
         switch (readed_char) {
             case '.' :
+                var = malloc (sizeof (Variable));
                 var->value = -1;
                 var->indice = empty_case_indice;
                 variables[x] = var;
@@ -115,7 +116,7 @@ void search_contraints(FILE *file){
                 readed_char = fgetc(file);
                 if(is_num(readed_char)) {
                     ungetc(readed_char,file);
-                    fscanf(file,"%d",&number2);;
+                    fscanf(file,"%d",&number2);
                 }
                 if(number2 != 0) {
                     add_c_sum_horizontal(indice,number2);
@@ -127,7 +128,7 @@ void search_contraints(FILE *file){
             default :
                 if (is_num(readed_char)) {
                     ungetc(readed_char,file);
-                    fscanf(file,"%d",&number1);;
+                    fscanf(file,"%d",&number1);
                 }
                 break;
         }
@@ -141,7 +142,7 @@ void initDomain(Variable * var){
 }
 
 void search_variable(Variable **tabvariables){
-    variablesInst = calloc(number_of_empty_case +1, sizeof(Variable));
+    variablesInst = calloc(number_of_empty_case, sizeof(Variable));
     int j = 0;
     int i;
     for (i = 0; i < (size_width * size_length); ++i) {

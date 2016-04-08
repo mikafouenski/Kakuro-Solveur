@@ -40,10 +40,31 @@ void echec(){
 }
 
 void freedom () {
-    int i;
-    for (i = 0; i < number_of_empty_case; ++i)
-        if(variablesInst[i])
-            free(variablesInst[i]);
-    free(variables);
-    free(variablesInst);
+    for (int i = 0; i < number_of_empty_case; ++i) {
+        Variable *v = variablesInst[i];
+        if (v->sum_H) {
+            for (int j = 0; j < number_of_empty_case; ++j) {
+                if (v->sum_H->vars[j] != NULL)
+                    v->sum_H->vars[j] = NULL;
+            }
+            free(v->sum_H);
+        }
+        // if (v->sum_V) {
+        //     for (int j = 0; j < number_of_empty_case; ++j) {
+        //         if (v->sum_V->vars[j])
+        //             v->sum_V->vars[j] = NULL;
+        //     }
+        //     free(v->sum_V);
+        // }
+        // if (v->diff) {
+        //     for (int j = 0; j < number_of_empty_case; ++j) {
+        //         if (v->diff->vars[j])
+        //             v->diff->vars[j] = NULL;
+        //     }
+        //     free(v->diff);
+        // }
+    }
+
+    // free(variablesInst);
+    // free(variables);
 }
