@@ -113,10 +113,9 @@ void search_contraints(FILE *file){
                     number1 = 0;
                 }
                 readed_char = fgetc(file);
-                while(is_num(readed_char)) {
-                    number2 *= 10;
-                    number2 += readed_char - '0';
-                    readed_char = fgetc(file);
+                if(is_num(readed_char)) {
+                    ungetc(readed_char,file);
+                    fscanf(file,"%d",&number2);;
                 }
                 if(number2 != 0) {
                     add_c_sum_horizontal(indice,number2);
@@ -127,8 +126,8 @@ void search_contraints(FILE *file){
                 break;
             default :
                 if (is_num(readed_char)) {
-                    number1 *= 10;
-                    number1 += readed_char - '0';
+                    ungetc(readed_char,file);
+                    fscanf(file,"%d",&number1);;
                 }
                 break;
         }
