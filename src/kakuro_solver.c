@@ -61,23 +61,6 @@ void add_c_diff(Variable * var) {
     var->diff = diff;
 }
 
-// void display_contraints(Constraints_Sum *sum){
-//     int i;
-//     printf("Contrainte sum ");
-//     printf("%d ---", sum->value);
-//     for(i = 0; sum->vars[i]; ++i)
-//         printf(" %d ",sum->vars[i]->indice);
-//     printf("\n");
-// }
-
-// void display_contraints_diff(Constraints_Diff *diff) {
-//     int i;
-//     printf("Contrainte diff ");
-//     for(i = 0; diff->vars[i]; ++i)
-//         printf(" %d ",diff->vars[i]->indice);
-//     printf("\n");
-// }
-
 void initVal(FILE *file){
     char readed_char = fgetc(file);
     while (readed_char != EOF) {
@@ -173,15 +156,7 @@ void search_variable(Variable **tabvariables){
     }
 }
 
-void solve_kakuro (FILE *file, int useFowardChecking) {
-    initVal(file);
-    search_empty_case(file);
-    search_contraints(file);
-    search_variable(variables);
-    int i;
-
-    fowardchecking(variablesInst);
-
+void print_result () {
     int indice = 0;
     int j = 0;
     while(variablesInst[indice]){
@@ -198,6 +173,19 @@ void solve_kakuro (FILE *file, int useFowardChecking) {
     }
     printf("\n");
     printf("\n");
+}
 
+void solve_kakuro (FILE *file, int useFowardChecking) {
+    initVal(file);
+    search_empty_case(file);
+    search_contraints(file);
+    search_variable(variables);
+
+    if (useFowardChecking)
+        fowardchecking(variablesInst);
+    else 
+        backtrack(variablesInst);
+
+    print_result();
     freedom();
 }
