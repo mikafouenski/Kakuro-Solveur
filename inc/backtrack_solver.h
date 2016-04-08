@@ -3,6 +3,6 @@
 
 #include "util.h"
 
-void backtrack(Variable ** variables);
+void backtrack(Variable **v, int number_of_empty_case);
 
 #endif

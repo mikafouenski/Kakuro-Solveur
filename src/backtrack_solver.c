@@ -1,6 +1,6 @@
 #include "backtrack_solver.h"
 
-void backtrack(Variable **v){
+void backtrack(Variable **v, int number_of_empty_case){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){

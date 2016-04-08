@@ -6,14 +6,10 @@
 
 #define sizeDomain 9
 
-int tabdomain[sizeDomain];
-int number_of_empty_case;
-int size_length;
-int size_width;
-
 typedef struct Constraints_Sum Constraints_Sum;
 typedef struct Constraints_Diff Constraints_Diff;
 typedef struct Variable Variable;
+typedef struct Size Size;
 
 struct Variable {
     int indice;
@@ -34,14 +30,18 @@ struct Constraints_Diff {
     Variable **vars;
 };
 
-Variable **variables;
-Variable **variablesInst;
+struct Size {
+    int length;
+    int width;
+};
 
 int testContraintDiff();
 
 int testContraintSomme();
 
 void echec();
+
+void initDomain(Variable * var);
 
 void freedom();
 

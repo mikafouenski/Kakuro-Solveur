@@ -1,10 +1,5 @@
 #include "fowardchecking_solver.h"
 
-void rebootDomain(Variable *v) {
-    for (int i = 0; i < sizeDomain; ++i)
-        v->tabdomainVar[i] = tabdomain[i];
-}
-
 void eraseContraintSum(Variable *v, Constraints_Sum *cs ) {
     int sum = 0;
     int i = 0;
@@ -57,7 +52,7 @@ void displayDomain(Variable *v){
     printf("\n");
 }
 
-void fowardchecking(Variable **v){
+void fowardchecking(Variable **v, int number_of_empty_case){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){ 
@@ -73,7 +68,7 @@ void fowardchecking(Variable **v){
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
                 if(i == 0) echec();
-                rebootDomain(current);
+                initDomain(current);
                 current->value = -1;
                 --i;
                 current = v[i];

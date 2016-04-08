@@ -1,8 +1,8 @@
 #ifndef __FOWARDCHECKING_H__
-#define __FOWARDCHECKING_H__ value
+#define __FOWARDCHECKING_H__
 
 #include "util.h"
 
-void fowardchecking(Variable **v);
+void fowardchecking(Variable **v, int number_of_empty_case);
 
 #endif
