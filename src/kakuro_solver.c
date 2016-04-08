@@ -182,10 +182,22 @@ void solve_kakuro (FILE *file, int useFowardChecking) {
 
     fowardchecking(variablesInst);
 
-    for (i=0; i < number_of_empty_case; ++i) {
-        Variable *var2 = variablesInst[i];
-        printf("Case n°%d : %d", var2->indice,var2->value); 
-        printf("\n");
+    int indice = 0;
+    int j = 0;
+    while(variablesInst[indice]){
+        if(j % size_width == 0){
+            printf("\n");
+        }
+        if(j == variablesInst[indice]->indice){
+            printf(" %d ",variablesInst[indice]->value);
+            ++indice;
+        }
+        else
+            printf(" . ");
+        ++j;
     }
+    printf("\n");
+    printf("\n");
+
     freedom();
 }
