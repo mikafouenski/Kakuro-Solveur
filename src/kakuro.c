@@ -1,13 +1,9 @@
 #include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include "time.h"
 
 #include "backtrack_solver.h"
 #include "fowardchecking_solver.h"
-
-//Variable **variables;
 
 #define is_num(c)(('0' <= (c)) && ((c) <= '9'))
 
@@ -168,7 +164,7 @@ void print_result (Variable **variablesInst, Size size) {
     int j = 0;
     while(variablesInst[indice]){
         if(j % size.width == 0){
-            printf("\n");
+            printf("\n\t");
         }
         if(j == variablesInst[indice]->indice){
             printf(" %d ",variablesInst[indice]->value);
@@ -187,6 +183,10 @@ int main(int argc, char **argv) {
     int fflag = 0;
     int c;
     opterr = 0;
+    clock_t beginning, end;
+    Stat stats;
+    stats.nb_test_constraints = 0;
+    stats.nb_node = 0;
 
     while ((c = getopt (argc, argv, "bf")) != -1) {
         switch (c) {
@@ -210,27 +210,28 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    clock_t beginning, end;
-    beginning = clock();
-
     Size size = initVal(f);
     Variable **variables = calloc (size.width * size.length, sizeof(Variable));
     int number_of_empty_case = search_empty_case(f, variables);
     search_contraints(f, variables, number_of_empty_case, size);
     Variable **variablesInst = search_variable(variables, number_of_empty_case, size);
+    free(variables);
+
+    beginning = clock();
 
     if (fflag)
-        fowardchecking(variablesInst, number_of_empty_case);
+        fowardchecking(variablesInst, number_of_empty_case, &stats);
     else if (bflag)
-        backtrack(variablesInst, number_of_empty_case);
-
-    print_result(variablesInst, size);
-    freedom();
-
+        backtrack(variablesInst, number_of_empty_case, &stats);
 
     end = clock();
-    printf("%lf\n",(double) (end - beginning) / CLOCKS_PER_SEC);
 
+    print_result(variablesInst, size);
+    printf("Temps: %lf sec\n", (double) (end - beginning) / CLOCKS_PER_SEC);
+    printf("Nombre de noeuds: %d\n", stats.nb_node);
+    printf("Nombre de tests de contraintes: %d\n", stats.nb_test_constraints);
+
+    freedom(variablesInst, number_of_empty_case);
     fclose(f);
     return 0;
 }

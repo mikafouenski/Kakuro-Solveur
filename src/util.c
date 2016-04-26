@@ -1,6 +1,7 @@
 #include "util.h"
 
-int testContraintSomme(Constraints_Sum * contraint){
+int testContraintSomme(Constraints_Sum * contraint, Stat *stats){
+    stats->nb_test_constraints++;
     if(contraint == NULL) return 42;
     int i = 0;
     int sum = 0;
@@ -14,7 +15,8 @@ int testContraintSomme(Constraints_Sum * contraint){
     return 0;
 }
 
-int testContraintDiff(Constraints_Diff *  contraint, int val){
+int testContraintDiff(Constraints_Diff *  contraint, int val, Stat *stats){
+    stats->nb_test_constraints++;
     int i = 0;
     while(contraint->vars[i]){
         if (contraint->vars[i]->value == val) return 0;
@@ -30,7 +32,7 @@ void echec(Variable **variablesInst, int number_of_empty_case){
         printf("\n");
     }
     printf("ECHEC !\n");
-    freedom();
+    freedom(variablesInst, number_of_empty_case);
     exit(1);
 }
 
@@ -39,24 +41,17 @@ void initDomain(Variable * var){
         var->tabdomainVar[i] = i + 1;
 }
 
-void freedom () {
-    // for (int i = 0; i < number_of_empty_case; ++i) {
-    //     Variable *v = variablesInst[i];
-    //     if (v->sum_H) {
-    //         int j = 0;
-    //         while (v->sum_H->vars[j]) {
-    //             v->sum_H->vars[j] = NULL;
-    //             ++j;
-    //         }
-    //     }
-    // }
+void freedom (Variable **vars, int number_of_empty_case) {
+    for (int i = 0; i < number_of_empty_case; ++i) {
+        Variable *v = vars[i];
+        free(v);
+    }
 
     // for (int i = 0; i < number_of_empty_case; ++i) {
-    //     Variable *v = variablesInst[i];
+    //     Variable *v = vars[i];
     //     if (v->sum_H) {
             
     //     }
     // }
-    // free(variablesInst);
-    // free(variables);
+    free(vars);
 }

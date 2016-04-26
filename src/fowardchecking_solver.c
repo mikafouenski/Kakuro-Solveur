@@ -44,27 +44,15 @@ void eraseDomain(Variable *v) {
     }
 }
 
-void displayDomain(Variable *v){
-    printf("variable n°%d : ",v->indice);
-    for(int i = 0 ; i < sizeDomain; ++i){
-        printf(" %d ", v->tabdomainVar[i]);
-    }
-    printf("\n");
-}
-
-void fowardchecking(Variable **v, int number_of_empty_case){
+void fowardchecking(Variable **v, int number_of_empty_case, Stat *stats){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){ 
-
         eraseDomain(current);
-        //displayDomain(current);
         do {
             while(current->indice_domaine < sizeDomain && 
-                current->tabdomainVar[current->indice_domaine] == -1){
+                current->tabdomainVar[current->indice_domaine] == -1)
                 ++current->indice_domaine;
-            }
-           
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
                 if(i == 0) echec();
@@ -78,13 +66,12 @@ void fowardchecking(Variable **v, int number_of_empty_case){
                     ++current->indice_domaine;
                 }
             }
-
             current->value = current->tabdomainVar[current->indice_domaine];
+            ++stats->nb_node;
             ++current->indice_domaine;
-        } while(!(testContraintDiff(current->diff,current->value) && 
-            testContraintSomme(current->sum_H) &&
-            testContraintSomme(current->sum_V)));
-       // printf("current Var %d %d\n",current->indice,current ->value );
+        } while(!(testContraintDiff(current->diff, current->value, stats)
+            && testContraintSomme(current->sum_H, stats)
+            && testContraintSomme(current->sum_V, stats)));
         ++i;
         current = v[i];
     }

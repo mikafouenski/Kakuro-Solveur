@@ -10,6 +10,7 @@ typedef struct Constraints_Sum Constraints_Sum;
 typedef struct Constraints_Diff Constraints_Diff;
 typedef struct Variable Variable;
 typedef struct Size Size;
+typedef struct Stat Stat;
 
 struct Variable {
     int indice;
@@ -35,14 +36,19 @@ struct Size {
     int width;
 };
 
-int testContraintDiff();
+struct Stat {
+    int nb_node;
+    int nb_test_constraints;
+};
 
-int testContraintSomme();
+int testContraintDiff(Constraints_Diff *  contraint, int val, Stat *stats);
+
+int testContraintSomme(Constraints_Sum * contraint, Stat *stats);
 
 void echec();
 
 void initDomain(Variable * var);
 
-void freedom();
+void freedom(Variable **v, int number_of_empty_case);
 
 #endif
