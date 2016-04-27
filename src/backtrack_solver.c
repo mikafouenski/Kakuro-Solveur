@@ -1,13 +1,13 @@
 #include "backtrack_solver.h"
 
-void backtrack(Variable **v, int number_of_empty_case, Stat *stats){
+void backtrack(Variable **v, int number_of_empty_case, Stat *stats, int size_width){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){
         do{
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
-                if(i == 0) echec();
+                if(i == 0) echec(v, number_of_empty_case, size_width);
                 current->value = -1;
                 --i;
                 current = v[i];
