@@ -210,6 +210,8 @@ int main(int argc, char **argv) {
         return 1;
     }
 
+    printf("Init CSP...\n");
+
     Size size = initVal(f);
     Variable **variables = calloc (size.width * size.length, sizeof(Variable));
     int number_of_empty_case = search_empty_case(f, variables);
@@ -219,13 +221,17 @@ int main(int argc, char **argv) {
 
     beginning = clock();
 
-    if (fflag)
+    if (fflag) {
+        printf("Foward Checking...\n");
         fowardchecking(variablesInst, number_of_empty_case, &stats);
-    else if (bflag)
+    } else if (bflag) {
+        printf("Backtrack...\n");
         backtrack(variablesInst, number_of_empty_case, &stats);
+    }
 
     end = clock();
 
+    printf("Done.\n");
     print_result(variablesInst, size);
     printf("Temps: %lf sec\n", (double) (end - beginning) / CLOCKS_PER_SEC);
     printf("Nombre de noeuds: %d\n", stats.nb_node);

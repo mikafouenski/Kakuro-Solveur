@@ -44,6 +44,9 @@ void initDomain(Variable * var){
 void freedom (Variable **vars, int number_of_empty_case) {
     for (int i = 0; i < number_of_empty_case; ++i) {
         Variable *v = vars[i];
+        if (v->sum_H) {
+            
+        }
         free(v);
     }
 
