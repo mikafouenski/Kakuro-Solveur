@@ -7,6 +7,15 @@
 
 #define is_num(c)(('0' <= (c)) && ((c) <= '9'))
 
+/**
+ * @brief      Add a vertical Sum constraint 
+ *
+ * @param      variables             The variables array
+ * @param[in]  indice                The indice
+ * @param[in]  number                The value
+ * @param[in]  number_of_empty_case  The number of empty case
+ * @param[in]  size_width            The size width
+ */
 void add_c_sum_vertical(Variable **variables, int indice, int number, int number_of_empty_case, int size_width) {
     Constraints_Sum *sum = malloc(sizeof(Constraints_Sum));
     sum->value = number;
@@ -21,6 +30,15 @@ void add_c_sum_vertical(Variable **variables, int indice, int number, int number
     }
 }
 
+/**
+ * @brief      Add a horizontal Sum constraint 
+ *
+ * @param      variables             The variables array
+ * @param[in]  indice                The indice
+ * @param[in]  number                The value
+ * @param[in]  number_of_empty_case  The number of empty case
+ * @param[in]  size_width            The size width
+ */
 void add_c_sum_horizontal(Variable **variables, int indice, int number, int number_of_empty_case, int size_width) {
     Constraints_Sum *sum = malloc( sizeof(Constraints_Sum));
     sum->value = number;
@@ -35,6 +53,12 @@ void add_c_sum_horizontal(Variable **variables, int indice, int number, int numb
     }
 }
 
+/**
+ * @brief      Add a difference constraint
+ *
+ * @param      var                   The var
+ * @param[in]  number_of_empty_case  The number of empty case
+ */
 void add_c_diff(Variable * var, int number_of_empty_case) {
     Constraints_Diff *diff = malloc(sizeof(Constraints_Diff));
     diff->vars = calloc (number_of_empty_case, sizeof(Variable));
@@ -62,6 +86,13 @@ void add_c_diff(Variable * var, int number_of_empty_case) {
     var->diff = diff;
 }
 
+/**
+ * @brief      Get the size of the grid
+ *
+ * @param      file  The input file
+ *
+ * @return     Struct Size filed
+ */
 Size initVal(FILE *file){
     Size size;
     size.width = 0;
@@ -78,6 +109,14 @@ Size initVal(FILE *file){
     return size;
 }
 
+/**
+ * @brief      malloc all the variables
+ *
+ * @param      file       The input file
+ * @param      variables  The variables array
+ *
+ * @return     the number of empty cases
+ */
 int search_empty_case(FILE *file, Variable **variables){
     rewind(file);
     int number_of_empty_case = 0;
@@ -106,6 +145,14 @@ int search_empty_case(FILE *file, Variable **variables){
     return number_of_empty_case;
 }
 
+/**
+ * @brief      Fill all the Sums constraints
+ *
+ * @param      file                  The input file
+ * @param      variables             The variables
+ * @param[in]  number_of_empty_case  The number of empty case
+ * @param[in]  size                  The size
+ */
 void search_contraints(FILE *file, Variable **variables, int number_of_empty_case, Size size){
     rewind(file);
     int readed_char;
@@ -143,6 +190,16 @@ void search_contraints(FILE *file, Variable **variables, int number_of_empty_cas
     }
 }
 
+/**
+ * @brief      Make an array with none NULL address and create difference
+ *             constraints
+ *
+ * @param      variables             The variables
+ * @param[in]  number_of_empty_case  The number of empty case
+ * @param[in]  size                  The size
+ *
+ * @return     new array of variables
+ */
 Variable** search_variable(Variable **variables, int number_of_empty_case, Size size){
     Variable **variablesInst = calloc(number_of_empty_case, sizeof(Variable));
     int j = 0;
@@ -159,6 +216,12 @@ Variable** search_variable(Variable **variables, int number_of_empty_case, Size 
     return variablesInst;
 }
 
+/**
+ * @brief      Display th result
+ *
+ * @param      variablesInst  The variables
+ * @param[in]  size           The size
+ */
 void print_result (Variable **variablesInst, Size size) {
     int indice = 0;
     int j = 0;
@@ -167,17 +230,30 @@ void print_result (Variable **variablesInst, Size size) {
             printf("\n\t");
         }
         if(j == variablesInst[indice]->indice){
+            printf("\e[1m");
             printf(" %d ",variablesInst[indice]->value);
+            printf("\e[0m");
             ++indice;
         }
-        else
-            printf(" . ");
+        else {
+            printf("\e[30;40m");
+            printf("   ");
+            printf("\e[0m");
+        }
         ++j;
     }
     printf("\n");
     printf("\n");
 }
 
+/**
+ * @brief      The main function
+ *
+ * @param[in]  argc  The argc
+ * @param      argv  The argv
+ *
+ * @return     return value
+ */
 int main(int argc, char **argv) {
     int bflag = 0;
     int fflag = 0;
