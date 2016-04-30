@@ -45,10 +45,10 @@ int testContraintDiff(Constraints_Diff *  contraint, int val, Stat *stats);
 
 int testContraintSomme(Constraints_Sum * contraint, Stat *stats);
 
-void echec(Variable **variablesInst, int number_of_empty_case, int size_width);
+void echec(Variable **variablesInst, int number_of_empty_case);
 
 void initDomain(Variable * var);
 
-void freedom(Variable **v, int number_of_empty_case, int size_width);
+void freedom(Variable **v, int number_of_empty_case);
 
 #endif

@@ -44,7 +44,7 @@ void eraseDomain(Variable *v) {
     }
 }
 
-void fowardchecking(Variable **v, int number_of_empty_case, Stat *stats, int size_width){
+void fowardchecking(Variable **v, int number_of_empty_case, Stat *stats){
     int i = 0;
     Variable *current = v[i];
     while(i < number_of_empty_case){ 
@@ -55,7 +55,7 @@ void fowardchecking(Variable **v, int number_of_empty_case, Stat *stats, int siz
                 ++current->indice_domaine;
             while(current->indice_domaine > sizeDomain){
                 current->indice_domaine = 0;
-                if(i == 0) echec(v, number_of_empty_case, size_width);
+                if(i == 0) echec(v, number_of_empty_case);
                 initDomain(current);
                 current->value = -1;
                 --i;

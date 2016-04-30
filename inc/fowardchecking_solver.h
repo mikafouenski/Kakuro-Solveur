@@ -3,6 +3,6 @@
 
 #include "util.h"
 
-void fowardchecking(Variable **v, int number_of_empty_case, Stat *stats, int size_width);
+void fowardchecking(Variable **v, int number_of_empty_case, Stat *stats);
 
 #endif

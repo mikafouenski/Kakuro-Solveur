@@ -223,10 +223,10 @@ int main(int argc, char **argv) {
 
     if (fflag) {
         printf("Foward Checking...\n");
-        fowardchecking(variablesInst, number_of_empty_case, &stats, size.width);
+        fowardchecking(variablesInst, number_of_empty_case, &stats);
     } else if (bflag) {
         printf("Backtrack...\n");
-        backtrack(variablesInst, number_of_empty_case, &stats, size.width);
+        backtrack(variablesInst, number_of_empty_case, &stats);
     }
 
     end = clock();
@@ -237,7 +237,7 @@ int main(int argc, char **argv) {
     printf("Nombre de noeuds: %d\n", stats.nb_node);
     printf("Nombre de tests de contraintes: %d\n", stats.nb_test_constraints);
 
-    freedom(variablesInst, number_of_empty_case, size.width);
+    freedom(variablesInst, number_of_empty_case);
     fclose(f);
     return 0;
 }
