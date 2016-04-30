@@ -188,6 +188,14 @@ int main(int argc, char **argv) {
     stats.nb_test_constraints = 0;
     stats.nb_node = 0;
 
+    if (argc != 3) {
+        printf ("Usage: %s OPTION FILE\n", argv[0]);
+        printf ("Solve Kakuro grid on the txt format.\n");
+        printf("    -b,                      use backtrack method.\n");
+        printf("    -f,                      use foward-checking method.\n");
+        return 1;
+    }
+
     while ((c = getopt (argc, argv, "bf")) != -1) {
         switch (c) {
             case 'b':
