@@ -293,7 +293,7 @@ int main(int argc, char **argv) {
         perror("fopen");
         return 1;
     }
-
+    printf("File: %s\n", argv[optind]);
     printf("Init CSP...\n");
 
     Size size = initVal(f);
@@ -317,9 +317,9 @@ int main(int argc, char **argv) {
 
     printf("Done.\n");
     print_result(variablesInst, size);
-    printf("Temps: %lf sec\n", (double) (end - beginning) / CLOCKS_PER_SEC);
-    printf("Nombre de noeuds: %d\n", stats.nb_node);
-    printf("Nombre de tests de contraintes: %d\n", stats.nb_test_constraints);
+    printf("Time: %lf sec\n", (double) (end - beginning) / CLOCKS_PER_SEC);
+    printf("Node: %d\n", stats.nb_node);
+    printf("Constraint tests: %d\n", stats.nb_test_constraints);
 
     freedom(variablesInst, number_of_empty_case);
     fclose(f);
